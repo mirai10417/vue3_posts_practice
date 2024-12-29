@@ -33,3 +33,4 @@ npm run build
 ```sh
 npm run lint
 ```
+# vue3_posts_practice
