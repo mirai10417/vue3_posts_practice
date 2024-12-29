@@ -11,7 +11,7 @@
     </template>
 
     <p class="card-text">{{ content }}</p>
-    <p class="text-muted">{{ createAt }}</p>
+    <p class="text-muted">{{ createDate }}</p>
 
     <template #footer>
       <div class="d-flex flex-row-reverse">
@@ -24,9 +24,8 @@
 </template>
 
 <script setup>
-import AppCard from "@/components/AppCard.vue";
-
-defineProps({
+import { computed, inject } from "vue";
+const props = defineProps({
   title: {
     type: String,
     required: true,
@@ -38,6 +37,10 @@ defineProps({
     type: [String, Date, Number],
   },
 });
+const dayjs = inject("dayjs");
+const createDate = computed(() =>
+  dayjs(props.createAt).format("YYYY.MM.DD HH:mm:ss")
+);
 </script>
 
 <style lang="scss" scoped></style>

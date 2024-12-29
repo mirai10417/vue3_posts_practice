@@ -17,12 +17,5 @@ export default {
 
     // provide로 전역 함수 제공
     app.provide("formatDate", formatDate);
-
-    // 플러그인 옵션 출력
-    console.log("플러그인 옵션:", options);
-
-    if (options.type === "A") {
-      console.log("options type: ", options.type);
-    }
   },
 };

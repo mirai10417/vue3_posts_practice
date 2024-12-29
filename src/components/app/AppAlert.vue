@@ -30,8 +30,6 @@ const props = defineProps({
 const typeStyle = (type) =>
   type === "error" ? "alert-danger" : "alert-primary";
 
-console.log(props.item);
-
 // const props = defineProps({
 //   show: {
 //     typeStyle: Boolean,

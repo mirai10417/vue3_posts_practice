@@ -28,7 +28,7 @@
 <script setup>
 defineProps({
   title: String,
-  limit: Number,
+  limit: [String, Number],
 });
 
 defineEmits(["update:title", "update:limit"]);

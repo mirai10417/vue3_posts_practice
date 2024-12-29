@@ -5,6 +5,8 @@
   <button class="btn btn-primary" @click="$router.push('/')">Home 이동</button>
 </template>
 
-<script setup></script>
+<script setup>
+const test = "이제 뜨는건가?";
+</script>
 
 <style lang="scss" scoped></style>

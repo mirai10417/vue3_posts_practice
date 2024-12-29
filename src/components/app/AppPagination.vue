@@ -17,9 +17,9 @@
         class="page-item"
         :class="{ active: currentPage === page }"
       >
-        <a class="page-link" href="#" @click.prevent="$emit('page', page)"
-          >{{ page }}
-        </a>
+        <a class="page-link" href="#" @click.prevent="$emit('page', page)">{{
+          page
+        }}</a>
       </li>
       <li class="page-item" :class="isNextPage">
         <a
@@ -48,7 +48,6 @@ const props = defineProps({
     required: true,
   },
 });
-
 defineEmits(["page"]);
 const isPrevPage = computed(() => ({ disabled: !(props.currentPage > 1) }));
 const isNextPage = computed(() => ({

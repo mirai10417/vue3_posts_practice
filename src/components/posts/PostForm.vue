@@ -2,7 +2,10 @@
   <form>
     <div class="mb-3">
       <label for="title" class="form-label">제목</label>
+      <!-- autofocus -->
       <input
+        v-focus
+        v-color="'red'"
         :value="title"
         @input="$emit('update:title', $event.target.value)"
         type="text"
