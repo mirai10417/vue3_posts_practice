@@ -25,12 +25,10 @@ export const useAxios = (url, config = {}, options = {}) => {
   // ★ 외부에서 오는 파라미터를 미리 { } 해놔야 구조분해 할 때 에러가 안난다. 파라미터 {}를 하지 않고 const { } = config 를 선언하면 에러남
   const { params } = config;
   const execute = (body) => {
-    console.log("body: ", body);
-    console.log("typeof: ", typeof body);
     data.value = null;
     error.value = null;
     loading.value = true;
-    axios(url, {
+    axios(unref(url), {
       ...defaultConfig,
       ...config,
       params: unref(params),
@@ -55,7 +53,7 @@ export const useAxios = (url, config = {}, options = {}) => {
       });
   };
 
-  if (isRef(params)) {
+  if (isRef(params) || isRef(url)) {
     watchEffect(execute);
   } else {
     if (immediate) {

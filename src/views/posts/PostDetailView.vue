@@ -4,6 +4,7 @@
   <AppError v-else-if="error" :message="error.message" />
   <div v-else>
     <h2>{{ post.title }}</h2>
+    <p>id: {{ props.id }}, isOdd: {{ isOdd }}</p>
     <p>{{ post.content }}</p>
     <p class="text-muted">
       {{ $dayjs(post.createAt).format("YYYY.MM.DD HH:mm:ss") }}
@@ -12,10 +13,14 @@
     <AppError v-if="removeError" :message="removeError.message" />
     <div class="row g-2">
       <div class="col-auto">
-        <button class="btn btn-outline-dark">이전글</button>
+        <button class="btn btn-outline-dark" @click="$router.push('/posts/10')">
+          이전글
+        </button>
       </div>
       <div class="col-auto">
-        <button class="btn btn-outline-dark">다음글</button>
+        <button class="btn btn-outline-dark" @click="$router.push('/posts/11')">
+          다음글
+        </button>
       </div>
       <div class="col-auto me-auto"></div>
       <div class="col-auto">
@@ -48,22 +53,31 @@
 </template>
 
 <script setup>
-import { useRouter } from "vue-router";
+import { onBeforeRouteLeave, onBeforeRouteUpdate, useRouter } from "vue-router";
 import { deletePost } from "@/api/posts";
-import { reactive, ref } from "vue";
+import { computed, reactive, ref, toRef, toRefs } from "vue";
 import { useAxios } from "@/hooks/useAxios";
 import { useAlert } from "@/composables/alert";
+import { useNumber } from "@/composables/number";
 
 const { vAlert, vSuccess } = useAlert();
 
 const props = defineProps({
-  id: String,
+  id: [String, Number],
 });
 
-const { error, loading, data: post } = useAxios(`/posts/${props.id}`);
+const url = computed(() => `/posts/${props.id}`);
+const { error, loading, data: post } = useAxios(url);
 
 const router = useRouter();
 const id = props.id;
+
+const { id: idRef } = toRefs(props);
+// const idRef = toRef(props, "id");
+
+const { isOdd } = useNumber(idRef);
+
+console.log("PostDetailView id: ", id);
 
 const goDeletePost = async () => {
   if (confirm("삭제 하시겠습니까?") === false) {
@@ -126,6 +140,20 @@ const goListPage = () => {
 const goEditPage = () => {
   router.push({ name: "PostEdit", params: { id: props.id } });
 };
-</script>
 
+onBeforeRouteUpdate(() => {
+  console.log("onBeforeRouteUpdate");
+});
+
+onBeforeRouteLeave(() => {
+  console.log("onBeforeRouteLeave");
+});
+</script>
+<script>
+export default {
+  beforeRouteEnter() {
+    console.log("beforeRouteEnter");
+  },
+};
+</script>
 <style lang="scss" scoped></style>

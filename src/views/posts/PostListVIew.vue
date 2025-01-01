@@ -6,6 +6,7 @@
     <PostFilter
       v-model:title="params.title_like"
       v-model:limit="params._limit"
+      @update:limit="changeLimit"
     />
 
     <hr class="my-4" />
@@ -13,8 +14,13 @@
     <AppLoading v-if="loading" />
 
     <AppError v-else-if="error" :message="error.message" />
+
+    <template v-else-if="!isExits">
+      <p class="text-center py-5 text-muted">조회 된 글이 없습니다.</p>
+    </template>
+
     <template v-else>
-      <AppGrid :items="posts">
+      <AppGrid :items="posts" col-class="col-12 col-md-6 col-lg-4">
         <template v-slot="{ item }">
           <PostItem
             :title="item.title"
@@ -22,6 +28,7 @@
             :create-at="item.createAt"
             @click="goPage(item.id)"
             @modal="openModal(item)"
+            @preview="selectPreview(item.id)"
           ></PostItem>
         </template>
       </AppGrid>
@@ -41,15 +48,12 @@
       />
     </Teleport>
 
-    <!-- <template v-if="beforeDetailId">
+    <template v-if="previewId">
       <hr class="my-5" />
       <AppCard>
-        <PostDetailView
-          v-if="beforeDetailId"
-          :id="beforeDetailId"
-        ></PostDetailView>
+        <PostDetailView :id="previewId"></PostDetailView>
       </AppCard>
-    </template> -->
+    </template>
   </div>
 </template>
 
@@ -63,30 +67,42 @@ import { computed } from "@vue/reactivity";
 import PostModal from "@/components/posts/PostModal.vue";
 import { useAxios } from "@/hooks/useAxios";
 
+const previewId = ref(null);
+const selectPreview = (id) => {
+  previewId.value = id;
+};
+
+const changeLimit = (value) => {
+  params.value._limit = value;
+  params.value._page = 1;
+};
+
 const router = useRouter();
 const route = useRoute();
 
 const params = ref({
   _sort: "createAt",
   _order: "desc",
-  _limit: 9,
+  _limit: 6,
   _page: 1,
   title_like: "",
 });
 
 const {
   response,
-  data: posts,
+  data: posts = ref([]), // posts를 빈 배열로 초기화,
   error,
   loading,
 } = useAxios("/posts", { method: "get", params });
+
+const isExits = computed(() => {
+  return posts.value && posts.value.length > 0;
+});
 
 const totalCount = computed(() => response.value.headers["x-total-count"]);
 const pageCount = computed(() =>
   Math.ceil(totalCount.value / params.value._limit)
 );
-
-// const beforeDetailId = route.query.id == undefined ? "0" : route.query.id;
 
 const goPage = (id) => {
   router.push({

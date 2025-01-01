@@ -11,12 +11,26 @@
   </AppGrid>
   <hr class="my-4" />
   <h2>{{ formattedDate }}</h2>
-  <button class="btn btn-primary" @click="person.say">click person</button>
+  <!-- <button class="btn btn-primary" @click="person.say">click person</button> -->
+  <p>{{ position }}</p>
+  {{ x }}, {{ y }}
 </template>
 
 <script setup>
 import { useRouter } from "vue-router";
-import { ref, inject } from "vue";
+import { ref, inject, reactive, toRef, toRefs } from "vue";
+
+const position = reactive({
+  x: 100,
+  y: 1,
+});
+
+// const x = toRef(position, "x");
+// const y = toRef(position, "y");
+const { x, y } = toRefs(position);
+
+console.log("x: ", typeof x);
+console.log("y: ", typeof y);
 
 const router = useRouter();
 const goAboutPage = () => {
@@ -32,10 +46,7 @@ const options = {
 };
 const formatDate = inject("formatDate", options);
 const currentDate = new Date();
-
 const formattedDate = ref(formatDate(currentDate));
-console.log("currentDate: ", currentDate);
-console.log("formattedDate: ", formattedDate.value);
 </script>
 
 <style lang="scss" scoped></style>

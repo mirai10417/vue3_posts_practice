@@ -7,16 +7,19 @@
     <p class="text-muted">{{ createAt }}</p> -->
 
     <template #header>
-      <h5 class="card-title">{{ title }}</h5>
+      <h5 class="card-title text-truncate">{{ title }}</h5>
     </template>
 
-    <p class="card-text">{{ content }}</p>
+    <p class="card-text text-truncate">{{ content }}</p>
     <p class="text-muted">{{ createDate }}</p>
 
     <template #footer>
       <div class="d-flex flex-row-reverse">
-        <button class="btn p-0" @click.stop="$emit('modal')">
+        <button class="btn p-1" @click.stop="$emit('modal')">
           <i class="bi bi-aspect-ratio-fill"></i>
+        </button>
+        <button class="btn p-1" @click.stop="$emit('preview')">
+          <i class="bi bi-app"></i>
         </button>
       </div>
     </template>
@@ -37,6 +40,8 @@ const props = defineProps({
     type: [String, Date, Number],
   },
 });
+
+defineEmits(["modal", "preview"]);
 const dayjs = inject("dayjs");
 const createDate = computed(() =>
   dayjs(props.createAt).format("YYYY.MM.DD HH:mm:ss")

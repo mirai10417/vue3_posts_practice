@@ -10,6 +10,7 @@ import NestedView from "@/views/nested/NestedView.vue";
 import NestedOneView from "@/views/nested/NestedOneView.vue";
 import NestedTwoView from "@/views/nested/NestedTwoView.vue";
 import NestedHomeView from "@/views/nested/NestedHomeView.vue";
+import MyPage from "@/views/MyPage.vue";
 
 const routes = [
   {
@@ -71,11 +72,38 @@ const routes = [
       },
     ],
   },
+  {
+    path: "/my",
+    name: "MyPage",
+    component: MyPage,
+    // beforeEnter: (to, from) => {
+    //   //배열 값으로 여러개 이동 가능
+    //   // return { name: "Home" }; 기본 Default
+    //   // query값이 있으면 query값을 지우고 페이지 이동 시켜줌
+    //   if (Object.keys(to.query).length > 0) {
+    //     return { path: to.path, query: {} };
+    //   }
+    // },
+    beforeEnter: [removeQueryString],
+  },
 ];
+
+function removeQueryString(to) {
+  if (Object.keys(to.query).length > 0) {
+    return { path: to.path, query: {} };
+  }
+}
 
 const router = createRouter({
   history: createWebHistory("/"),
   routes,
 });
+
+// router.beforeEach((to, from) => {
+//   if (to.name === "MyPage") {
+//     // return false;
+//     return router.push({ name: "Home" });
+//   }
+// });
 
 export default router;

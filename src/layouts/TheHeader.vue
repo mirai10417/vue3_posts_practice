@@ -2,7 +2,7 @@
   <header>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Welcome</a>
+        <RouterLink class="navbar-brand" to="/"> Welcome </RouterLink>
         <button
           class="navbar-toggler"
           type="button"
@@ -38,6 +38,11 @@
             <li class="nav-item">
               <RouterLink class="nav-link" to="/nested" active-class="active"
                 >메뉴 안의 메뉴</RouterLink
+              >
+            </li>
+            <li class="nav-item">
+              <RouterLink class="nav-link" to="/my" active-class="active"
+                >MyPage</RouterLink
               >
             </li>
           </ul>
