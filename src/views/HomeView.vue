@@ -14,11 +14,14 @@
   <!-- <button class="btn btn-primary" @click="person.say">click person</button> -->
   <p>{{ position }}</p>
   {{ x }}, {{ y }}
+  <h2>API로부터 받은 데이터:</h2>
+  <pre>{{ data }}</pre>
 </template>
 
 <script setup>
 import { useRouter } from "vue-router";
-import { ref, inject, reactive, toRef, toRefs } from "vue";
+import { ref, inject, reactive, toRef, toRefs, onMounted } from "vue";
+import axios from "axios"; // Default export로 import
 
 const position = reactive({
   x: 100,
@@ -47,6 +50,18 @@ const options = {
 const formatDate = inject("formatDate", options);
 const currentDate = new Date();
 const formattedDate = ref(formatDate(currentDate));
+
+const data = ref(null);
+
+onMounted(async () => {
+  try {
+    const response = await axios.get("/api/test");
+    data.value = response.data;
+    console.log(data.value);
+  } catch (error) {
+    console.error("데이터 가져오기 실패:", error);
+  }
+});
 </script>
 
 <style lang="scss" scoped></style>
