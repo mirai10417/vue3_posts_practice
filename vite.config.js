@@ -37,4 +37,7 @@ export default defineConfig({
     //     changeOrigin: true: 백엔드와 다른 도메인을 사용하는 경우, 원본 호스트 헤더를 변경하여 Cross-Origin 문제를 방지.
     //     rewrite: (path) => path.replace(/^\/api/, ''): 프록시 요청 시 '/api' 경로를 제거하고 백엔드의 실제 경로로 매핑.
   },
+  define: {
+    __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: false, // 비활성화 플래그
+  },
 });

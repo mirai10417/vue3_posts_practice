@@ -45,6 +45,14 @@
                 >MyPage</RouterLink
               >
             </li>
+            <li class="nav-item">
+              <RouterLink
+                class="nav-link"
+                to="/reserveMng"
+                active-class="active"
+                >예약관리</RouterLink
+              >
+            </li>
           </ul>
           <form class="d-flex">
             <button class="btn btn-outline-light" type="button" @click="goPage">
