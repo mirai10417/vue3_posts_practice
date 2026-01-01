@@ -12,10 +12,21 @@ import NestedTwoView from "@/views/nested/NestedTwoView.vue";
 import NestedHomeView from "@/views/nested/NestedHomeView.vue";
 import ReserveMng from "@/views/reserve/ReserveMng.vue";
 import MyPage from "@/views/MyPage.vue";
+import LoginView from "@/views/LoginView.vue";
 
 const routes = [
   {
     path: "/",
+    redirect: "/login",
+  },
+  {
+    path: "/login",
+    name: "Login",
+    component: LoginView,
+    meta: { hideHeader: true },
+  },
+  {
+    path: "/home",
     name: "Home",
     component: HomeView,
   },
