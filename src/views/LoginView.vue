@@ -1,11 +1,11 @@
-<!-- src/views/LoginView.vue -->
 <script setup>
-import { ref } from "vue";
+import { onBeforeUnmount, onMounted, ref } from "vue";
 import { login } from "@/api/auth";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "@/store/authStore";
 
 const router = useRouter();
-
+const store = useAuthStore();
 const email = ref("yhs1105@test.com");
 const password = ref("1234");
 const error = ref("");
@@ -16,15 +16,27 @@ const submit = async () => {
   loading.value = true;
 
   try {
-    await login({ email: email.value.trim(), password: password.value.trim() });
+    const res = await login({
+      email: email.value.trim(),
+      password: password.value.trim(),
+    });
 
-    // router.push("/home");
+    store.setLoginSuccess(res.data.accessToken, res.data.username);
+    router.push("/home");
   } catch (e) {
     error.value = "아이디 또는 비밀번호를 확인해주세요.";
   } finally {
     loading.value = false;
   }
 };
+
+onMounted(() => {
+  document.body.classList.add("login-page");
+});
+
+onBeforeUnmount(() => {
+  document.body.classList.remove("login-page");
+});
 </script>
 
 <template>
@@ -298,7 +310,7 @@ const submit = async () => {
   opacity: 1;
 }
 
-:global(body) {
+:global(body.login-page) {
   background: radial-gradient(
       1200px 600px at 10% 10%,
       rgba(99, 102, 241, 0.18),

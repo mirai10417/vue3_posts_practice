@@ -1,3 +1,13 @@
+# 2026-01-04 TODO
+
+# 1. backend /api/users/me 로그인 체크 router.beforeEach(async () => {}) 로직으로 변경하기, 현재는 App.vue에서 처리중
+
+# 2026-01-01 TODO
+
+# 1. JWT Filter에서 access token → Authentication 생성 - SUCCESS
+
+# 2. Vue에서 access 만료 시 refresh 자동 호출 - YET
+
 # vue3-posts
 
 This template should help get you started developing with Vue 3 in Vite.
@@ -33,6 +43,9 @@ npm run build
 ```sh
 npm run lint
 ```
+
 # vue3_posts_practice
+
 # vue3_posts_practice
+
 # vue3_posts_practice

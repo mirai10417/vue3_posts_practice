@@ -1,4 +1,4 @@
-import axios from "axios";
+import api from "@/api/axios";
 import { http } from "./http";
 
 /**
@@ -6,7 +6,7 @@ import { http } from "./http";
  * @param {{ email: string, password: string }} data
  */
 export const login = (data) => {
-  return axios.post("/api/auth/login", data);
+  return api.post("/api/auth/login", data);
 };
 
 // export const login = (data) => http.post("/auth/login", data);

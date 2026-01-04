@@ -1,8 +1,38 @@
+<script setup>
+import { computed, onMounted, ref, watch } from "vue";
+import { useRouter } from "vue-router";
+import axios from "axios";
+import { useMenuStore } from "@/store/menuStore";
+import { useAuthStore } from "@/store/authStore";
+
+const router = useRouter();
+const menuStore = useMenuStore();
+const authStore = useAuthStore();
+const username = computed(() => authStore.username);
+
+// onMounted(() => {
+//   menuStore.fetchMenuList();
+// });
+
+watch(
+  () => authStore.initialized,
+  (ready) => {
+    if (ready && authStore.accessToken) {
+      menuStore.fetchMenuList();
+    }
+  },
+  { immediate: true }
+);
+
+const goPage = () => {
+  router.push("/posts/create");
+};
+</script>
 <template>
   <header>
     <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
       <div class="container-fluid">
-        <RouterLink class="navbar-brand" to="/"> Welcome </RouterLink>
+        <RouterLink class="navbar-brand" to="/"> 로그인 화면 </RouterLink>
         <button
           class="navbar-toggler"
           type="button"
@@ -27,53 +57,15 @@
           </ul>
           <form class="d-flex">
             <span style="color: white; padding: 5px"
-              >{{ session }} 님 안녕하세요.
+              >{{ username }} 님 안녕하세요.
             </span>
-            <button class="btn btn-outline-light" type="button" @click="goPage">
+            <!-- <button class="btn btn-outline-light" type="button" @click="goPage">
               글쓰기
-            </button>
+            </button> -->
           </form>
         </div>
       </div>
     </nav>
   </header>
 </template>
-
-<script setup>
-import { onMounted, ref } from "vue";
-import { useRouter } from "vue-router";
-import axios from "axios";
-import { useMenuStore } from "@/store/menuStore";
-
-const router = useRouter();
-const goPage = () => {
-  router.push("/posts/create");
-};
-
-let session = ref();
-onMounted(async () => {
-  const sessionIsNot = sessionStorage.getItem("session") == null ? true : false;
-
-  if (sessionIsNot) {
-    session.value = generateRandomKey();
-    sessionStorage.setItem("session", session.value);
-  } else {
-    session.value = sessionStorage.getItem("session");
-  }
-});
-
-function generateRandomKey() {
-  return "key_" + Math.random().toString(36).substring(2, 10); // 난수 키 생성
-}
-
-const menuStore = useMenuStore();
-
-onMounted(() => {
-  menuStore.fetchMenuList();
-});
-
-console.log("TheHeader.vue");
-console.log(menuStore);
-</script>
-
 <style lang="scss" scoped></style>

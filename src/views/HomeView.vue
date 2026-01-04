@@ -1,27 +1,10 @@
-<template>
-  <div>
-    <h2>Home View</h2>
-    <p>{{ $route.path }}</p>
-    <p>{{ $route.name }}</p>
-    <button class="btn btn-primary" @click="goAboutPage">About으로 이동</button>
-  </div>
-  <hr class="my-4" />
-  <AppGrid :items="items" v-slot="{ item }" col-class="col-3">
-    <AppCard>{{ item }}</AppCard>
-  </AppGrid>
-  <hr class="my-4" />
-  <h2>{{ formattedDate }}</h2>
-  <!-- <button class="btn btn-primary" @click="person.say">click person</button> -->
-  <p>{{ position }}</p>
-  {{ x }}, {{ y }}
-  <h2>API로부터 받은 데이터:</h2>
-  <pre>{{ data }}</pre>
-</template>
-
 <script setup>
 import { useRouter } from "vue-router";
 import { ref, inject, reactive, toRef, toRefs, onMounted } from "vue";
 import axios from "axios"; // Default export로 import
+import { useMenuStore } from "@/store/menuStore";
+
+const errorMessage = "오류입니다.";
 
 const position = reactive({
   x: 100,
@@ -40,7 +23,7 @@ const goAboutPage = () => {
   router.push("/about");
 };
 
-const items = ref(["사과", "딸기", "포도", "바나나"]);
+const items = ref(["사과", "딸기", "포도", "바나나", "배", "우유"]);
 
 const person = inject("person");
 
@@ -51,17 +34,33 @@ const formatDate = inject("formatDate", options);
 const currentDate = new Date();
 const formattedDate = ref(formatDate(currentDate));
 
+const menuNm = ref();
+const menuUrl = ref();
+const menuStore = useMenuStore();
 const data = ref(null);
-
-onMounted(async () => {
+const insertMenu = async () => {
   try {
-    const response = await axios.get("/api/test");
+    const response = await axios.post("/api/insertMenu", {
+      menuNm: menuNm.value,
+      menuUrl: menuUrl.value,
+    });
     data.value = response.data;
-    console.log(data.value);
-  } catch (error) {
-    console.error("데이터 가져오기 실패:", error);
-  }
-});
-</script>
+    console.log("등록 성공:", data.value);
 
+    await menuStore.fetchMenuList();
+  } catch (error) {
+    console.error("메뉴 등록 실패:", error);
+  }
+};
+</script>
+<template>
+  <div>
+    <h2>Home View</h2>
+    <h2>JWT 로그인 및 새로고침시 토큰 재발급까지 완료</h2>
+    <AppGrid :items="items" v-slot="{ item }" col-class="col-3">
+      <AppCard>{{ item }}</AppCard>
+    </AppGrid>
+    <AppError :message="errorMessage" />
+  </div>
+</template>
 <style lang="scss" scoped></style>
