@@ -1,7 +1,7 @@
 import axios from "axios";
 import { isRef, ref, unref, watchEffect } from "vue";
 
-axios.defaults.baseURL = import.meta.env.VITE_APP_API_URL;
+axios.defaults.baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const defaultConfig = {
   method: "get",
